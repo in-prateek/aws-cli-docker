@@ -2,10 +2,6 @@ sudo: required
 services:
   - docker
 
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install -y -o Dpkg::Options::="--force-confold" docker-engine
-
 before_script:
   - docker pull iplwarriors/magento-deploy-aws || true
 script:
