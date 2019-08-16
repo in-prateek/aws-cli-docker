@@ -6,4 +6,3 @@ before_script:
   - docker pull iplwarriors/magento-deploy-aws || true
 script:
   - docker build --pull --cache-from iplwarriors/magento-deploy-aws --tag iplwarriors/magento-deploy-aws .
-  - docker run iplwarriors/magento-deploy-aws
