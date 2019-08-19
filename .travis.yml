@@ -1,8 +1,26 @@
 sudo: required
 services:
   - docker
+env:
+  global:
+    - IMAGE_NAME=iplwarriors/magento-deploy-aws
+    - REGISTRY_USER=automatedipl
 
 before_script:
-  - docker pull iplwarriors/magento-deploy-aws || true
+  - version="$TRAVIS_BUILD_ID"
+  - docker pull "$IMAGE_NAME" || true
 script:
-  - docker build --pull --cache-from iplwarriors/magento-deploy-aws --tag iplwarriors/magento-deploy-aws .
+  - docker build --pull --cache-from "$IMAGE_NAME" --tag "$IMAGE_NAME" .
+
+after_script:
+  - docker images
+
+before_deploy:
+  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:latest"
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${version}"
+deploy:
+  provider: script
+  script: docker push "${IMAGE_NAME}:latest" && docker push "${IMAGE_NAME}:${version}"
+  on:
+    branch: master
