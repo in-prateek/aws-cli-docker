@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-stretch
+FROM php:7.2-cli-stretch
 
 # Install dependencies
 RUN apt-get update \
@@ -18,6 +18,9 @@ RUN apt-get update \
 # PIP Installation
 RUN pip3 install awscli
 
+# Increasing PHP memory limit
+COPY memory-limit-php.ini /usr/local/etc/php/conf.d/memory-limit-php.ini
+
 # CURL Installation
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -28,4 +31,4 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN ["chmod", "+x", "/docker-entrypoint.sh"]
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["php-fpm", "-R"]
+CMD ["php", "-R"]
