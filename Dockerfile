@@ -13,7 +13,8 @@ RUN apt-get update \
   	libxslt1-dev \
     python3 \
     python3-pip \
-    rsync
+    rsync \
+    unzip
 
 # PIP Installation
 RUN pip3 install awscli
@@ -26,6 +27,11 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # PHP Extension
 RUN docker-php-ext-install dom gd intl mbstring pdo_mysql xsl zip bcmath soap sockets opcache
+
+# Install X-Debug
+RUN pecl install xdebug \
+  && docker-php-ext-enable xdebug
+COPY ./docker/xdebug/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN ["chmod", "+x", "/docker-entrypoint.sh"]
