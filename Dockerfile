@@ -14,10 +14,14 @@ RUN apt-get update \
     python3 \
     python3-pip \
     rsync \
-    unzip
+    unzip \
+    ruby-dev
 
 # PIP Installation
 RUN pip3 install awscli
+
+# DPL Installation
+RUN gem install dpl
 
 # Increasing PHP memory limit
 COPY memory-limit-php.ini /usr/local/etc/php/conf.d/memory-limit-php.ini
